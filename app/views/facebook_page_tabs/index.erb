@@ -1,0 +1,40 @@
+<%= link_to 'Back', facebook_pages_path %>
+
+<h1> <%= @page['name'] %> - #<%= @page['id'] %></h1>
+
+<h3>Tabs</h3>
+<ul>
+  <% @tabs.each do |tab| %>
+    <li>
+      <h4> <%= tab['name'] %></h4>
+      <ul>
+        <li> <%= link_to 'Open', tab['link'], target: '_blank' %> </li>
+        <li> Is permanent? <strong><%= tab['is_permanent'] %></strong> </li>
+        <li> Position: <strong><%= tab['position'] %></strong> </li>
+
+        <% if tab['application'] %>
+          <li> Application: <strong> <%= tab['application']['name'] %> - #<%= tab['application']['id'] %> </strong>
+
+          <% if tab['application']['id'] == Rails.application.secrets.facebook_app_id %>
+            <%= form_tag(facebook_page_facebook_page_tab_path(@page['id'], "app_#{tab['application']['id']}"), method: :delete) do |f| %>
+
+              <%= hidden_field :token, '', value: params[:token], name: 'token' %>
+
+              <%= submit_tag 'Remove page tab' %>
+            <% end %>
+          <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>
+
+<%= form_for(facebook_page_facebook_page_tabs_path(params[:facebook_page_id])) do |f| %>
+
+  <%= f.hidden_field :token, value: params[:token], name: 'token' %>
+  <%= f.submit 'Add page tab' %>
+<% end %>
+
+
+

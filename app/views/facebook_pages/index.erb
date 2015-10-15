@@ -1,0 +1,8 @@
+
+<ul>
+  <% @pages.each do |page| %>
+    <li><%= page['name'] %>
+    <%= link_to 'View tabs', facebook_page_facebook_page_tabs_path(page['id'], token: page['access_token']) %>
+    </li>
+  <% end %>
+</ul>
